@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Comeback Protocol — Client Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800;900&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16110d;
+    --paper:#f3ede1;
+    --paper-2:#ebe2d1;
+    --blood:#9a2417;
+    --blood-bright:#c0341f;
+    --brass:#b4842f;
+    --brass-light:#d9b25a;
+    --steel:#3a4a52;
+    --green:#4a5d3a;
+    --line:rgba(22,17,13,0.14);
+    --line-strong:rgba(22,17,13,0.32);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Spectral',Georgia,serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ---- type system ---- */
+  .display{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:0.02em;line-height:0.92}
+  .util{font-family:'Archivo',sans-serif}
+  .eyebrow{
+    font-family:'Archivo',sans-serif;
+    font-weight:700;
+    font-size:0.72rem;
+    letter-spacing:0.34em;
+    text-transform:uppercase;
+    color:var(--blood);
+  }
+
+  /* ---- hero ---- */
+  header.hero{
+    background:
+      radial-gradient(120% 90% at 80% 0%, rgba(180,132,47,0.16), transparent 55%),
+      linear-gradient(165deg,#1d1611 0%, #16110d 60%, #221a12 100%);
+    color:var(--paper);
+    padding:70px 0 56px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:4px solid var(--brass);
+  }
+  header.hero::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg,transparent,transparent 78px,rgba(243,237,225,0.035) 78px,rgba(243,237,225,0.035) 79px);
+    pointer-events:none;
+  }
+  .hero .eyebrow{color:var(--brass-light)}
+  .hero-grid{position:relative;z-index:2}
+  .hero h1{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(4.2rem,13vw,9.5rem);
+    line-height:0.82;
+    letter-spacing:0.01em;
+    margin:14px 0 6px;
+  }
+  .hero h1 .accent{color:var(--blood-bright)}
+  .hero .sub{
+    font-family:'Spectral',serif;
+    font-style:italic;
+    font-size:clamp(1.05rem,2.4vw,1.45rem);
+    color:rgba(243,237,225,0.82);
+    max-width:640px;
+    margin-top:10px;
+  }
+  .dossier-meta{
+    display:flex;flex-wrap:wrap;gap:0;
+    margin-top:40px;
+    border-top:1px solid rgba(243,237,225,0.2);
+  }
+  .dossier-meta div{
+    flex:1 1 150px;
+    padding:18px 22px 14px 0;
+    border-right:1px solid rgba(243,237,225,0.14);
+  }
+  .dossier-meta div:last-child{border-right:none}
+  .dossier-meta .k{font-family:'Archivo',sans-serif;font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--brass-light);font-weight:700}
+  .dossier-meta .v{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;margin-top:6px;color:var(--paper)}
+  .dossier-meta .v small{font-family:'Spectral',serif;font-size:0.85rem;font-style:italic;color:rgba(243,237,225,0.6)}
+
+  /* ---- section scaffolding ---- */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px}
+  .sec-num{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:2.6rem;
+    color:var(--blood);
+    line-height:1;
+  }
+  .sec-head h2{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(2.4rem,5.5vw,3.8rem);
+    line-height:0.95;
+    letter-spacing:0.01em;
+  }
+  .lede{font-size:1.12rem;max-width:760px;margin:14px 0 36px;color:#2c241c}
+  .lede strong{color:var(--blood)}
+
+  /* ---- callout / note ---- */
+  .note{
+    border-left:4px solid var(--brass);
+    background:var(--paper-2);
+    padding:20px 24px;
+    margin:28px 0;
+    font-size:0.98rem;
+  }
+  .note .tag{font-family:'Archivo',sans-serif;font-weight:800;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:6px}
+  .note.blood{border-left-color:var(--blood)}
+  .note.blood .tag{color:var(--blood)}
+  .note.steel{border-left-color:var(--steel)}
+  .note.steel .tag{color:var(--steel)}
+
+  /* ---- macro cards ---- */
+  .macro-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2px;background:var(--line-strong);border:1px solid var(--line-strong);margin:30px 0}
+  .macro{background:var(--paper);padding:22px 20px}
+  .macro .n{font-family:'Bebas Neue',sans-serif;font-size:3rem;line-height:0.9;color:var(--blood)}
+  .macro .l{font-family:'Archivo',sans-serif;font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:#6b5d4d;margin-top:4px}
+  .macro .d{font-size:0.86rem;font-style:italic;color:#5a4d3e;margin-top:6px}
+
+  /* ---- meal blocks ---- */
+  .meal{
+    border:1px solid var(--line);
+    border-top:3px solid var(--green);
+    background:#f7f2e8;
+    padding:24px 26px;
+    margin:18px 0;
+  }
+  .meal h4{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:12px;letter-spacing:0.01em}
+  .meal h4 .time{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--brass);background:rgba(180,132,47,0.12);padding:1px 10px;border-radius:2px;letter-spacing:0.05em}
+  .meal h4 .pro{margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--blood)}
+  .opts{margin-top:14px;display:grid;gap:10px}
+  .opt{display:flex;gap:12px;font-size:0.96rem;padding-bottom:10px;border-bottom:1px dotted var(--line)}
+  .opt:last-child{border-bottom:none;padding-bottom:0}
+  .opt .badge{font-family:'Archivo',sans-serif;font-weight:800;font-size:0.6rem;letter-spacing:0.1em;color:#fff;padding:3px 7px;height:fit-content;border-radius:2px;white-space:nowrap;margin-top:2px}
+  .badge.nv{background:var(--blood)}
+  .badge.v{background:var(--green)}
+
+  /* ---- training ---- */
+  .week-nav{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 34px}
+  .week-nav a{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.06em;
+    text-decoration:none;color:var(--ink);
+    border:1px solid var(--line-strong);padding:9px 15px;border-radius:2px;
+    transition:all .18s;text-transform:uppercase;
+  }
+  .week-nav a:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .day{border:1px solid var(--line-strong);margin:20px 0;background:var(--paper);overflow:hidden}
+  .day-head{
+    display:flex;align-items:center;gap:16px;
+    padding:18px 24px;
+    background:linear-gradient(100deg,#1d1611,#2a2017);
+    color:var(--paper);
+  }
+  .day-head .dno{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;line-height:0.8;color:var(--brass-light)}
+  .day-head .dtitle{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:0.03em;line-height:1}
+  .day-head .dfocus{font-family:'Spectral',serif;font-style:italic;font-size:0.9rem;color:rgba(243,237,225,0.7);display:block;margin-top:2px}
+  .day-head .dtag{margin-left:auto;font-family:'Archivo',sans-serif;font-weight:700;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(217,178,90,0.5);color:var(--brass-light);border-radius:2px}
+
+  table.lifts{width:100%;border-collapse:collapse;font-size:0.92rem}
+  table.lifts th{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:0.64rem;letter-spacing:0.12em;text-transform:uppercase;
+    text-align:left;padding:12px 24px;color:#6b5d4d;border-bottom:2px solid var(--line-strong);background:var(--paper-2);
+  }
+  table.lifts td{padding:13px 24px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.lifts tr:last-child td{border-bottom:none}
+  table.lifts .ex{font-family:'Archivo',sans-serif;font-weight:700;font-size:0.96rem;color:var(--ink)}
+  table.lifts .ex small{display:block;font-family:'Spectral',serif;font-weight:400;font-style:italic;font-size:0.82rem;color:#6b5d4d;margin-top:3px;max-width:340px}
+  table.lifts .sr{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--blood);white-space:nowrap}
+  table.lifts .rest{font-family:'Archivo',sans-serif;font-size:0.82rem;color:#6b5d4d}
+  .day-foot{padding:14px 24px;background:var(--paper-2);font-size:0.86rem;font-style:italic;color:#4a3f31;border-top:1px solid var(--line)}
+
+  /* ---- supplement table ---- */
+  .supp{border:1px solid var(--line-strong);margin:24px 0}
+  .supp-row{display:grid;grid-template-columns:1.4fr 0.8fr 2fr;border-bottom:1px solid var(--line)}
+  .supp-row:last-child{border-bottom:none}
+  .supp-row.head{background:var(--ink);color:var(--paper)}
+  .supp-row.head div{font-family:'Archivo',sans-serif;font-weight:700;font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;padding:13px 20px}
+  .supp-row > div{padding:16px 20px;font-size:0.92rem}
+  .supp-row .name{font-family:'Archivo',sans-serif;font-weight:700;color:var(--ink)}
+  .supp-row .dose{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--blood)}
+  .supp-row:nth-child(even):not(.head){background:#f7f2e8}
+
+  /* ---- principles grid ---- */
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);margin:30px 0}
+  .grid2 .cell{background:var(--paper);padding:24px}
+  .grid2 .cell h4{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.02em;color:var(--blood);margin-bottom:8px}
+  .grid2 .cell p{font-size:0.95rem}
+
+  /* ---- progression / hypertrophy ---- */
+  ul.clean{list-style:none;margin:18px 0}
+  ul.clean li{padding:11px 0 11px 32px;position:relative;border-bottom:1px solid var(--line);font-size:0.98rem}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean li::before{content:"";position:absolute;left:6px;top:18px;width:9px;height:9px;background:var(--brass);transform:rotate(45deg)}
+  ul.clean li strong{color:var(--blood)}
+
+  /* ---- footer ---- */
+  footer{background:var(--ink);color:var(--paper);padding:56px 0 40px;text-align:center}
+  footer .display{font-size:clamp(2.4rem,6vw,4rem);color:var(--paper)}
+  footer .display .accent{color:var(--blood-bright)}
+  footer p{font-style:italic;color:rgba(243,237,225,0.65);max-width:560px;margin:16px auto 0;font-size:0.98rem}
+  footer .crest{font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:0.3em;font-size:0.7rem;color:var(--brass-light);text-transform:uppercase;margin-bottom:20px}
+
+  .disclaimer{font-size:0.8rem;color:#7a6c5b;font-style:italic;border-top:1px solid var(--line);padding-top:24px;margin-top:10px;max-width:760px}
+
+  @media (max-width:680px){
+    body{font-size:16px}
+    .wrap{padding:0 18px}
+    .supp-row{grid-template-columns:1fr}
+    .supp-row > div{padding:10px 18px}
+    .supp-row.head{display:none}
+    .supp-row .name::after{content:""}
+    table.lifts th:nth-child(4),table.lifts td:nth-child(4){display:none}
+    .day-head .dno{font-size:2rem}
+    .dossier-meta div{flex:1 1 100%;border-right:none;border-bottom:1px solid rgba(243,237,225,0.14)}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.in{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="eyebrow">Forge &amp; Iron Performance · Client Dossier No. 034</div>
+    <h1>THE<br><span class="accent">COMEBACK</span><br>PROTOCOL</h1>
+    <p class="sub">A ten-month campaign to strip 35 kilos, rebuild the strength of a bull, and resolve the metabolic root — engineered for one man, not a template.</p>
+    <div class="dossier-meta">
+      <div><div class="k">Athlete</div><div class="v">6'3" <small>/ 34 yrs</small></div></div>
+      <div><div class="k">Start</div><div class="v">125 <small>kg</small></div></div>
+      <div><div class="k">Target</div><div class="v">90 <small>kg</small></div></div>
+      <div><div class="k">Pace</div><div class="v">0.75 <small>kg / wk</small></div></div>
+      <div><div class="k">Horizon</div><div class="v">~10 <small>months</small></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- STRATEGY -->
+<section id="strategy">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2>The Brief &amp; The Strategy</h2></div>
+    <p class="lede">You were known for the strength of a bull. Two years out, a hard year of grief, and a tangle of metabolic warning signs have buried that man under fat and fatigue — <strong>but the foundation is intact.</strong> Prior training builds myonuclei your muscle cells keep for life; you regain far faster than you first built. This is recovery of something you already own.</p>
+
+    <p>The cluster you carry — belly fat, skin tags, likely insulin resistance, low energy, blood pressure near 140/90, probably-suppressed testosterone — is not five problems. It is <strong>one pattern</strong>: the metabolic-syndrome cluster. That is the best news in this dossier, because a single intervention moves all of it. Build muscle and lose visceral fat, and insulin sensitivity, energy, blood pressure, testosterone, and even the dark circles improve together. We do not chase symptoms. We pull the root.</p>
+
+    <div class="note blood">
+      <span class="tag">The one non-negotiable</span>
+      Your plan honours your choice to go medication-free — and lifestyle change genuinely moves 140/90. But you must <strong>know your number, not avoid it.</strong> A home BP monitor (~₹1,500), readings morning and evening for two weeks, gives you the data to run this safely and to refuse medication from a position of evidence rather than guesswork. Until heavy loading begins, we train in a blood-pressure-friendly style by design. That is not caution for its own sake — it is how a 34-year-old returns without tearing something in month one.
+    </div>
+
+    <div class="grid2">
+      <div class="cell"><h4>Phase 1 · Reawaken</h4><p>Months 1–3. Higher reps, controlled tempo, machines and dumbbells, never grinding to failure. Builds real muscle and insulin sensitivity while keeping BP spikes small. This is not a soft warm-up — it is the base that makes heavy work safe.</p></div>
+      <div class="cell"><h4>Phase 2 · Reclaim</h4><p>Months 4+. With BP trending down and a leaner frame, the barbell returns — squat, deadlift, bench, press in lower rep ranges. This is where the 100 kg numbers come back on the board and the bull strength is rebuilt for real.</p></div>
+    </div>
+    <p style="font-size:0.95rem;color:#5a4d3e;font-style:italic">This dossier details Phase 1 in full — the block you begin tomorrow. Phase 2 is unlocked by your progress, not the calendar.</p>
+  </div>
+</section>
+
+<!-- NUTRITION -->
+<section id="nutrition">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2>The Nutrition System</h2></div>
+    <p class="lede">At 125 kg with real fat to spare, you can do what lean men cannot: <strong>lose fat and build muscle at the same time</strong> for months. The engine is a moderate deficit, relentless protein, and training hard enough to demand the muscle stays. We do not crash — crash dieting wrecks energy, hair, and testosterone, the exact things you are here to fix.</p>
+
+    <div class="macro-row">
+      <div class="macro"><div class="n">2,350</div><div class="l">kcal / day</div><div class="d">A real deficit, not a brutal one</div></div>
+      <div class="macro"><div class="n">200<span style="font-size:1.3rem">g</span></div><div class="l">Protein</div><div class="d">The anchor. Hit it daily, no exceptions</div></div>
+      <div class="macro"><div class="n">190<span style="font-size:1.3rem">g</span></div><div class="l">Carbs</div><div class="d">Concentrated around training</div></div>
+      <div class="macro"><div class="n">70<span style="font-size:1.3rem">g</span></div><div class="l">Fat</div><div class="d">Whole sources, for hormones</div></div>
+      <div class="macro"><div class="n">35<span style="font-size:1.3rem">g</span>+</div><div class="l">Fibre</div><div class="d">Drives insulin sensitivity</div></div>
+    </div>
+
+    <div class="note steel">
+      <span class="tag">The two levers that beat everything else</span>
+      Before any meal detail: <strong>cut liquid sugar and refined carbs</strong> (the single biggest move for your belly, insulin resistance, and skin tags) and <strong>keep added salt moderate</strong> (this directly lowers BP). Do these two things and your diet is already treating your blood pressure before you touch a weight. Everything below is built on this floor.
+    </div>
+
+    <h3 class="display" style="font-size:2.1rem;color:var(--ink);margin:40px 0 6px">A Day On The Plan</h3>
+    <p style="color:#5a4d3e;margin-bottom:8px">Each meal lists options — pick one per slot. <span style="color:var(--blood);font-weight:700">NON-VEG</span> covers eggs, chicken, fish. <span style="color:var(--green);font-weight:700">VEG</span> swaps hold the same protein. Mix and match across days so you never get bored.</p>
+
+    <!-- BREAKFAST -->
+    <div class="meal">
+      <h4><span class="time">07:30</span> Breakfast <span class="pro">~35g protein</span></h4>
+      <div class="opts">
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>The Builder's Scramble.</strong> 3 whole eggs + 3 egg whites scrambled in minimal oil, with 60g rolled oats cooked in water and topped with a handful of berries. Steady blood sugar all morning, no crash.</div></div>
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>Chicken &amp; egg hash.</strong> 100g leftover shredded chicken + 2 eggs + sautéed onion, capsicum, spinach. A savoury, high-protein start when you want to skip oats.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Paneer bhurji bowl.</strong> 150g paneer crumbled and cooked with tomato, onion, turmeric; served with 1 multigrain roti or 60g oats. Add a scoop of whey to water on the side to top up protein.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Greek yogurt power bowl.</strong> 250g unsweetened Greek yogurt + 1 scoop whey stirred in + chia seeds + berries + 10g walnuts. Zero cooking, ~40g protein.</div></div>
+      </div>
+    </div>
+
+    <!-- MID-MORNING -->
+    <div class="meal">
+      <h4><span class="time">10:30</span> Mid-Morning Snack <span class="pro">~15g protein</span></h4>
+      <div class="opts">
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>2 boiled eggs</strong> + a black coffee or green tea. Simple, portable, filling.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Roasted chana (40g)</strong> + a small handful of almonds. Crunchy, high fibre, steady energy.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>200g Greek yogurt</strong> with cinnamon. Cinnamon has a mild, real effect on blood sugar — useful for you.</div></div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="meal">
+      <h4><span class="time">13:30</span> Lunch <span class="pro">~55g protein</span></h4>
+      <div class="opts">
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>The cornerstone plate.</strong> 250g grilled chicken breast (spiced however you like — tandoori masala, peri-peri, herbs), 150g cooked brown rice or quinoa, a large salad of leaves, cucumber, tomato, onion dressed with 1 tbsp olive oil + lemon. Your biggest protein hit of the day.</div></div>
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>Chicken &amp; rajma.</strong> 200g grilled chicken + a bowl of rajma (kidney beans) + half-portion brown rice + sautéed greens. Double protein, huge fibre, deeply satiating.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Tofu &amp; chana bowl.</strong> 200g pan-fried tofu + a bowl of chana masala (light on oil) + quinoa + salad. Add a scoop of whey post-meal to reach the protein target.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Paneer &amp; dal thali.</strong> 150g grilled paneer tikka + a bowl of dal + 1 multigrain roti + sabzi + salad. A familiar plate, engineered for protein and fibre.</div></div>
+      </div>
+    </div>
+
+    <!-- PRE/POST -->
+    <div class="meal">
+      <h4><span class="time">17:00</span> Pre / Post-Workout <span class="pro">~30g protein</span></h4>
+      <div class="opts">
+        <div class="opt"><span class="badge v">VEG</span><div><strong>The training shake.</strong> 1 scoop whey + 1 banana + water, blended. Fast protein and carbs around the session when your muscles use them best.</div></div>
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>Egg-white omelette</strong> (4 whites + 1 whole) with veg, if training later in the evening and you want real food.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Greek yogurt + honey drizzle</strong> + a few berries. The small honey is fine here — it's around training, when carbs are working for you.</div></div>
+      </div>
+    </div>
+
+    <!-- DINNER -->
+    <div class="meal">
+      <h4><span class="time">20:30</span> Dinner <span class="pro">~50g protein</span></h4>
+      <div class="opts">
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>The omega-3 plate.</strong> 200g pan-seared salmon or white fish in 1 tbsp olive oil, with a portion of lentils and a mountain of roasted or steamed greens (broccoli, beans, spinach). Anti-inflammatory — directly helps the wrist and knee aches.</div></div>
+        <div class="opt"><span class="badge nv">NON-VEG</span><div><strong>Grilled chicken &amp; veg.</strong> 200g chicken + a large tray of roasted vegetables + a small portion of sweet potato. Lighter carbs at night.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Tofu stir-fry.</strong> 200g tofu + tempeh + heaps of stir-fried vegetables in a light soy-ginger-garlic sauce, over a small portion of quinoa.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Moong dal cheela.</strong> 2 protein-rich moong dal cheelas stuffed with paneer + a side of salad and curd. Comforting, high protein, easy on digestion before sleep.</div></div>
+      </div>
+    </div>
+
+    <!-- EVENING -->
+    <div class="meal">
+      <h4><span class="time">22:00</span> Evening Cap <span class="pro">~15g protein</span></h4>
+      <p style="font-size:0.92rem;color:#5a4d3e;font-style:italic;margin-top:10px">Only if genuinely hungry. The goal is to land near 200g protein and sleep without a blood-sugar spike.</p>
+      <div class="opts" style="margin-top:12px">
+        <div class="opt"><span class="badge v">VEG</span><div><strong>Casein-style slow protein:</strong> 200g Greek yogurt or a small bowl of paneer cubes. Digests slowly, feeds muscle overnight.</div></div>
+        <div class="opt"><span class="badge v">VEG</span><div><strong>A square of 85% dark chocolate</strong> + herbal tea. A controlled treat that won't derail you.</div></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="tag">Free snacking &amp; the avoid list</span>
+      <strong>Eat freely:</strong> cucumber, carrots, celery, boiled eggs, roasted chana, a square of dark chocolate, green tea, black coffee, plenty of water (3.5–4L/day).<br><br>
+      <strong>Avoid for your goals:</strong> sugary drinks and fruit juice, refined flour (maida), deep-fried snacks, packaged sweets, and alcohol. These hammer the exact insulin sensitivity and blood pressure you're working to fix. You don't need perfection — aim for 90% adherence and the occasional planned meal out won't undo you.
+    </div>
+  </div>
+</section>
+
+<!-- SUPPLEMENTS -->
+<section id="supplements">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Supplement Schedule</h2></div>
+    <p class="lede">Targeted at your established deficiencies and your goals — <strong>not a kitchen sink.</strong> Supplements cope with gaps; they do not replace the diet and training that do the real work.</p>
+
+    <div class="supp">
+      <div class="supp-row head"><div>Supplement</div><div>Daily Dose</div><div>Why it's here for you</div></div>
+      <div class="supp-row"><div class="name">Vitamin D3</div><div class="dose">2,000–4,000 IU</div><div>Deficiency is near-certain for you. Take with a fatty meal. Underpins energy, testosterone, mood, and immunity. Test the level if you can.</div></div>
+      <div class="supp-row"><div class="name">Vitamin B12</div><div class="dose">1,000 mcg</div><div>Methylcobalamin form. Energy and nerve health — relevant to your fatigue and the dark circles.</div></div>
+      <div class="supp-row"><div class="name">Magnesium Glycinate</div><div class="dose">300–400 mg</div><div>Almost custom-built for you: improves insulin sensitivity, sleep, muscle recovery, <em>and</em> has a modest blood-pressure benefit. Take at night.</div></div>
+      <div class="supp-row"><div class="name">Creatine Monohydrate</div><div class="dose">5 g</div><div>The most proven strength &amp; muscle supplement in existence. Safe. Take daily, including rest days — timing doesn't matter.</div></div>
+      <div class="supp-row"><div class="name">Omega-3 Fish Oil</div><div class="dose">2–3 g EPA/DHA</div><div>Anti-inflammatory for the wrist and knee, supports BP and insulin sensitivity, aids recovery.</div></div>
+      <div class="supp-row"><div class="name">Whey Protein</div><div class="dose">1–2 scoops</div><div>A tool to reach 200g protein on busy days — not magic. Use when whole food falls short.</div></div>
+      <div class="supp-row"><div class="name">Iron</div><div class="dose">Only if tested low</div><div><strong>Do not supplement blind</strong> — excess iron is harmful. Confirm with a ferritin test first, then dose as advised.</div></div>
+      <div class="supp-row"><div class="name">L-Citrulline / Beetroot</div><div class="dose">Optional</div><div>A natural nitric-oxide nudge for blood pressure and training pumps, if you want one. Skip all stimulant fat-burners and pre-workouts — they raise BP.</div></div>
+    </div>
+
+    <div class="note blood">
+      <span class="tag">On the hair &amp; dark circles you named</span>
+      The dark circles will improve substantially from sleep, hydration, and correcting your iron / D / B12 — they're often a direct symptom of exactly those gaps. The hair benefits from the protein, omega-3, fixing deficiencies, and dropping stress, but its biggest lever is <strong>time plus a dermatologist's read</strong> on whether this is stress-driven shedding (common after grief and a shaved head) or early pattern loss. The plan helps; hold the transplant decision until your health has had 6–12 stable months.
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING -->
+<section id="training">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">04</span><h2>The Training Week</h2></div>
+    <p class="lede">Six sessions, built to grow your priority muscles — <strong>chest, shoulders, biceps, core, quads</strong> — twice each per week, the proven sweet spot for hypertrophy. Dumbbells and machines let you train each muscle to genuine fatigue <em>without</em> the max blood-pressure spike of heavy barbell grinding. This is Phase 1: serious, hard, and safe for your numbers.</p>
+
+    <div class="note steel">
+      <span class="tag">How every set runs in Phase 1</span>
+      <strong>10–15 reps · 3–4 sets · stop 2–3 reps short of failure · controlled tempo (2 sec down, 1 sec up) · breathe OUT on the effort — never hold your breath under load.</strong> Pick a weight where the last 2 reps are hard but clean. The "reps in reserve" rule is what keeps BP controlled while still triggering growth.
+    </div>
+
+    <div class="week-nav">
+      <a href="#d1">Mon · Push</a>
+      <a href="#d2">Tue · Quads</a>
+      <a href="#d3">Wed · Core+Walk</a>
+      <a href="#d4">Thu · Pull</a>
+      <a href="#d5">Fri · Upper</a>
+      <a href="#d6">Sat · Legs+Full</a>
+      <a href="#d7">Sun · Recover</a>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="day" id="d1">
+      <div class="day-head"><span class="dno">01</span><div><span class="dtitle">Monday — Push</span><span class="dfocus">Chest · Shoulders · Triceps</span></div><span class="dtag">Priority: Chest + Shoulders</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Incline Dumbbell Press<small>Upper-chest builder. 30° bench. Lower under control to a stretch, press up and slightly in.</small></td><td class="sr">4 × 10–12</td><td>Start 12–16kg/hand, progress weekly</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Machine Chest Press<small>Safe, stable pushing volume. Squeeze the chest hard at the top, slow on the way back.</small></td><td class="sr">3 × 12–15</td><td>Moderate, last 2 reps hard</td><td class="rest">75s</td></tr>
+          <tr><td class="ex">Seated Dumbbell Shoulder Press<small>Main delt builder. Press without locking out aggressively; keep ribs down.</small></td><td class="sr">3 × 10–12</td><td>Start 10–14kg/hand</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Lateral Raises<small>Width for the shoulders — the Cavill-line. Light weight, strict form, no swinging.</small></td><td class="sr">4 × 12–15</td><td>6–10kg/hand</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Cable Triceps Pushdown<small>Elbows pinned to sides, full extension, controlled return.</small></td><td class="sr">3 × 12–15</td><td>Moderate</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Overhead Dumbbell Extension<small>Long-head triceps for arm thickness. One heavy DB in both hands.</small></td><td class="sr">3 × 12–15</td><td>Light–moderate</td><td class="rest">60s</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">Warm up 5–10 min (light cardio + arm circles + 2 light feeder sets on the first lift). Finish: 5 min easy walk + chest/shoulder stretch.</div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day" id="d2">
+      <div class="day-head"><span class="dno">02</span><div><span class="dtitle">Tuesday — Legs</span><span class="dfocus">Quad-Focused · Rebuild the mass you lost</span></div><span class="dtag">Priority: Quads</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Leg Press<small>Your safest heavy-quad driver — spine supported, no BP spike from bracing a bar. Feet mid-platform, don't lock knees.</small></td><td class="sr">4 × 12–15</td><td>Build steadily; this can carry real weight safely</td><td class="rest">2 min</td></tr>
+          <tr><td class="ex">Goblet Squat<small>Re-teaches the squat pattern with a single DB held at the chest. Sit between the hips, chest tall, full depth you control.</small></td><td class="sr">3 × 12</td><td>Start 16–20kg</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Walking Lunges<small>Quad + glute + balance. Long strides, back knee toward floor. Dumbbells at sides.</small></td><td class="sr">3 × 10/leg</td><td>Bodyweight → light DBs</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Leg Extension<small>Pure quad isolation — the detail and teardrop. Pause and squeeze at the top.</small></td><td class="sr">4 × 12–15</td><td>Moderate, controlled</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Seated / Standing Calf Raise<small>Full stretch at the bottom, full rise at the top, no bouncing.</small></td><td class="sr">4 × 15–20</td><td>Moderate</td><td class="rest">45s</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">The knee with varicose veins: leg press and extension keep the load controlled and the leg supported. If any sharp pain (not muscle burn) appears behind the knee, stop that exercise and note it. Finish with gentle quad and calf stretches.</div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day" id="d3">
+      <div class="day-head"><span class="dno">03</span><div><span class="dtitle">Wednesday — Core + Walk</span><span class="dfocus">Active recovery · Insulin sensitivity</span></div><span class="dtag">Priority: Core</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Brisk Incline Walk<small>30–45 min, treadmill incline or outdoors. Pace where you can talk but not sing. Burns fat, sharpens insulin sensitivity, easy on the veins — without eating muscle like long runs did.</small></td><td class="sr">30–45 min</td><td>—</td><td class="rest">—</td></tr>
+          <tr><td class="ex">Plank<small>Brace hard, glutes tight, straight line. Quality over time.</small></td><td class="sr">3 × 30–45s</td><td>Bodyweight</td><td class="rest">45s</td></tr>
+          <tr><td class="ex">Hanging Knee Raises<small>Lower abs. Controlled — no swinging. Knees to chest, lower slowly.</small></td><td class="sr">3 × 12–15</td><td>Bodyweight</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Cable Crunch<small>Loaded ab work for thickness. Round the spine down, pull with the abs not the arms.</small></td><td class="sr">3 × 15</td><td>Moderate</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Dead Bug<small>Anti-rotation core control + spine health. Slow, opposite arm and leg, breathe.</small></td><td class="sr">3 × 10/side</td><td>Bodyweight</td><td class="rest">45s</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">This is your lightest day on purpose — it keeps fat loss moving while your push/pull muscles recover. The walk doubles as stress and blood-pressure medicine.</div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day" id="d4">
+      <div class="day-head"><span class="dno">04</span><div><span class="dtitle">Thursday — Pull</span><span class="dfocus">Back · Biceps · Rear Delts</span></div><span class="dtag">Priority: Biceps</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Lat Pulldown<small>Builds the V-taper that makes the waist look smaller. Pull to upper chest, drive elbows down, squeeze the back.</small></td><td class="sr">4 × 10–12</td><td>Moderate, full stretch at top</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Seated Cable Row<small>Mid-back thickness. Pull to the navel, shoulders back, don't lean far.</small></td><td class="sr">3 × 12</td><td>Moderate</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Single-Arm Dumbbell Row<small>Wrist-friendly back work (neutral grip helps your left wrist). Brace on a bench, row to the hip.</small></td><td class="sr">3 × 10–12/arm</td><td>14–20kg</td><td class="rest">75s</td></tr>
+          <tr><td class="ex">Face Pulls<small>Rear delts + shoulder health — protects against the pressing volume. Pull rope to forehead, elbows high.</small></td><td class="sr">3 × 15</td><td>Light</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Dumbbell Curls<small>Biceps — your priority. Strict, no swing, full squeeze. Alternate or together.</small></td><td class="sr">4 × 10–12</td><td>10–14kg, progress weekly</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Cable / Hammer Curls<small>Hammer grip is kinder to the wrist and builds arm thickness. Controlled tempo.</small></td><td class="sr">3 × 12–15</td><td>Moderate</td><td class="rest">60s</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">If the left wrist aches on straight-bar curls, switch to hammer or neutral-grip DB work — same biceps stimulus, happier joint. Never train through sharp joint pain.</div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day" id="d5">
+      <div class="day-head"><span class="dno">05</span><div><span class="dtitle">Friday — Upper</span><span class="dfocus">Chest · Shoulders · Arms emphasis</span></div><span class="dtag">Priority: Chest + Arms</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Flat Dumbbell Press<small>Mid-chest mass. Second weekly chest hit, different angle from Monday's incline. Control the stretch.</small></td><td class="sr">4 × 10–12</td><td>14–18kg/hand</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Machine Shoulder Press<small>Second delt session, stable and joint-friendly. Press smooth, don't slam the lockout.</small></td><td class="sr">3 × 12</td><td>Moderate</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Cable / Pec-Deck Fly<small>Chest stretch and squeeze for shape. Slow, feel the chest do the work.</small></td><td class="sr">3 × 12–15</td><td>Light–moderate</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Lateral Raises<small>More shoulder width — you can't have too much. Strict and light.</small></td><td class="sr">4 × 15</td><td>6–8kg</td><td class="rest">45s</td></tr>
+          <tr><td class="ex">Superset: DB Curl + Triceps Pushdown<small>Arm pump to finish — biceps and triceps back to back, no rest between the pair.</small></td><td class="sr">3 × 12 each</td><td>Moderate</td><td class="rest">75s after pair</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">A "look and feel good" session to close the week — high volume on the muscles you most want to develop, all in the BP-safe rep range.</div>
+    </div>
+
+    <!-- DAY 6 -->
+    <div class="day" id="d6">
+      <div class="day-head"><span class="dno">06</span><div><span class="dtitle">Saturday — Legs + Full Body</span><span class="dfocus">Posterior chain · Hinge practice · Core</span></div><span class="dtag">Priority: Quads + Core</span></div>
+      <table class="lifts">
+        <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Target Load</th><th>Rest</th></tr></thead>
+        <tbody>
+          <tr><td class="ex">Leg Press<small>Second weekly quad driver. Slightly higher reps today for volume and blood flow.</small></td><td class="sr">4 × 15</td><td>Moderate–heavy, controlled</td><td class="rest">2 min</td></tr>
+          <tr><td class="ex">Romanian Dumbbell Deadlift<small>Re-grooves the hip hinge that built your old deadlift — LIGHT for now, pattern over load. Hamstrings and glutes. Flat back, push hips back, DBs slide down the thighs.</small></td><td class="sr">3 × 10–12</td><td>Light — this is technique practice for Phase 2</td><td class="rest">90s</td></tr>
+          <tr><td class="ex">Bulgarian Split Squat<small>Single-leg quad and glute, fixes left-right imbalance. Rear foot on bench, drop straight down.</small></td><td class="sr">3 × 10/leg</td><td>Bodyweight → light DBs</td><td class="rest">75s</td></tr>
+          <tr><td class="ex">Leg Curl<small>Hamstring balance to protect the knee. Squeeze at full contraction.</small></td><td class="sr">3 × 12–15</td><td>Moderate</td><td class="rest">60s</td></tr>
+          <tr><td class="ex">Core Circuit<small>Cable crunch + plank + Russian twists, one round through, twice.</small></td><td class="sr">2 rounds</td><td>—</td><td class="rest">60s</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">The light RDL is deliberate — you're teaching the body the deadlift groove now so that when Phase 2 adds load, the pattern is already clean and the knee/back are protected.</div>
+    </div>
+
+    <!-- DAY 7 -->
+    <div class="day" id="d7">
+      <div class="day-head"><span class="dno">07</span><div><span class="dtitle">Sunday — Recover</span><span class="dfocus">Rest · Optional easy walk</span></div><span class="dtag">Full recovery</span></div>
+      <table class="lifts">
+        <tbody>
+          <tr><td class="ex">Complete Rest or Easy Walk<small>A relaxed 20–30 min walk if you feel like moving — no pace target. This is where muscle is actually built and where BP, sleep, and hormones reset. Respect it as much as the training days.</small></td><td class="sr">0–30 min</td><td>—</td><td class="rest">—</td></tr>
+          <tr><td class="ex">Mobility &amp; Stretch (optional)<small>10 min of gentle hips, hamstrings, chest, and shoulder stretching. Keeps the wrist and knee loose.</small></td><td class="sr">10 min</td><td>—</td><td class="rest">—</td></tr>
+        </tbody>
+      </table>
+      <div class="day-foot">Aim for 7–8 hours of sleep tonight especially. Sleep is your single biggest free lever — it drives testosterone, recovery, hair, dark circles, and tomorrow's energy.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HYPERTROPHY ENGINE -->
+<section id="hypertrophy">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">05</span><h2>How Hypertrophy Actually Happens</h2></div>
+    <p class="lede">Muscle grows for three reasons. Understand them and every set has a purpose beyond "moving weight." This is the engine under the whole program.</p>
+
+    <div class="grid2">
+      <div class="cell"><h4>Mechanical Tension</h4><p>The prime driver. Lifting challenging weight through a full range of motion. This is why we pick loads where the last 2 reps are genuinely hard — not light enough to be comfortable, not so heavy form breaks.</p></div>
+      <div class="cell"><h4>Metabolic Stress</h4><p>The "pump" and burn from higher-rep work and short rests. Our 10–15 rep ranges and 45–90s rests are deliberately tuned to create it — and it happens to be the BP-friendly zone too.</p></div>
+      <div class="cell"><h4>Progressive Overload</h4><p>The rule that makes it all compound. The body only adapts to demands it hasn't already met. Each week, you must give it slightly more than last week.</p></div>
+    </div>
+
+    <h3 class="display" style="font-size:1.9rem;margin:36px 0 4px">The Progression Rules</h3>
+    <ul class="clean">
+      <li><strong>Double progression.</strong> Stay at a weight until you hit the top of the rep range on all sets (e.g. all 4 sets at 12 reps). Then add the smallest increment and drop back to the bottom of the range. Repeat forever.</li>
+      <li><strong>Log every session.</strong> Weight, sets, reps — written down. You cannot beat last week if you don't know last week. This is the most important habit in the whole plan.</li>
+      <li><strong>Add ~2.5kg or 1–2 reps per week</strong> on the big lifts (press, leg press, rows) while form stays clean. Small, relentless steps beat heroic jumps that get you hurt.</li>
+      <li><strong>Keep 2–3 reps in reserve.</strong> Training to absolute failure isn't needed for growth and spikes your BP — leave a little in the tank, especially in Phase 1.</li>
+      <li><strong>Deload every 6–8 weeks.</strong> One lighter week (drop to ~60% effort) lets joints, nerves, and BP recover so you come back stronger. Not optional after a 2-year layoff.</li>
+      <li><strong>Sleep and protein are non-negotiable.</strong> You don't grow in the gym — you grow recovering from it. 200g protein and 7–8h sleep are where the muscle is actually made.</li>
+    </ul>
+
+    <div class="note blood">
+      <span class="tag">The unglamorous truth that decides everything</span>
+      Consistency beats perfection, every time. 200g protein daily, the deficit held, sleep protected, and showing up 5–6 days a week — done at 90% for ten months — beats a flawless plan run for three weeks and abandoned. You've carried the strength of a bull before. Your body remembers. This plan just digs that man back out from under a hard year. Trust the process and the numbers will follow.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="crest">Forge &amp; Iron Performance</div>
+    <div class="display">BECOME THE<br><span class="accent">BULL AGAIN</span></div>
+    <p>125 to 90. Ten months. One pattern to fix, one man to rebuild. Begin tomorrow, log everything, and let consistency do what it always does.</p>
+    <p class="disclaimer">This dossier is an educational training and nutrition plan, not medical advice. Given a resting blood pressure near 140/90, confirm your numbers with a home monitor and consult a doctor before beginning heavy resistance training — a lifestyle-first trial is reasonable to discuss, but the decision should be informed by real readings, not avoided. Stop any exercise that causes sharp joint pain, chest pain, dizziness, or shortness of breath, and seek medical attention. Have the knee veins assessed and get bloodwork (Vitamin D, B12, ferritin, testosterone, fasting glucose/HbA1c) to confirm the deficiencies this plan assumes. Supplement iron only if a test confirms low ferritin.</p>
+  </div>
+</footer>
+
+<script>
+  const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}})},{threshold:0.08});
+  document.querySelectorAll('section .wrap > *').forEach((el,i)=>{if(i%2===0){el.classList.add('reveal');obs.observe(el)}});
+</script>
+</body>
+</html>
